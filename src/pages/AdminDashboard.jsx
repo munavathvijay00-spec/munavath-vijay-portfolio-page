@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   User, Briefcase, GraduationCap, Trophy, Share2, 
-  Plus, Trash2, Edit2, LogOut, Camera, Save, X 
+  Plus, Trash2, Edit2, LogOut, Camera, Save, X,
+  Cpu, Mail, Terminal
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 
@@ -11,7 +12,11 @@ const AdminDashboard = () => {
     isLoggedIn, logout, profile, projects, education, achievements,
     updateProfile, updateSocials, addProject, editProject, deleteProject,
     addEducation, editEducation, deleteEducation,
-    addAchievement, editAchievement, deleteAchievement
+    addAchievement, editAchievement, deleteAchievement,
+    contactInfo, updateContactInfo,
+    skills, addSkill, deleteSkill,
+    experience, addExperience, editExperience, deleteExperience,
+    devLog, addDevLog, deleteDevLog
   } = usePortfolio();
   
   const navigate = useNavigate();
@@ -78,10 +83,14 @@ const AdminDashboard = () => {
           <div className="lg:col-span-1 space-y-2">
             {[
               { id: 'profile', icon: User, label: 'Profile' },
+              { id: 'experience', icon: Briefcase, label: 'Experience' },
               { id: 'projects', icon: Briefcase, label: 'Projects' },
+              { id: 'skills', icon: Cpu, label: 'Skills' },
               { id: 'education', icon: GraduationCap, label: 'Education' },
               { id: 'achievements', icon: Trophy, label: 'Achievements' },
               { id: 'socials', icon: Share2, label: 'Social Links' },
+              { id: 'contact', icon: Mail, label: 'Contact Info' },
+              { id: 'devlog', icon: Terminal, label: 'DevLog' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -104,8 +113,14 @@ const AdminDashboard = () => {
               {activeTab === 'profile' && (
                 <ProfileForm profile={profile} updateProfile={updateProfile} handlePhotoUpload={handlePhotoUpload} />
               )}
+              {activeTab === 'experience' && (
+                <ExperienceManager experience={experience} addExperience={addExperience} editExperience={editExperience} deleteExperience={deleteExperience} />
+              )}
               {activeTab === 'projects' && (
                 <ProjectsManager projects={projects} addProject={addProject} editProject={editProject} deleteProject={deleteProject} />
+              )}
+              {activeTab === 'skills' && (
+                <SkillsManager skills={skills} addSkill={addSkill} deleteSkill={deleteSkill} />
               )}
               {activeTab === 'education' && (
                 <EducationManager education={education} addEducation={addEducation} editEducation={editEducation} deleteEducation={deleteEducation} />
@@ -121,6 +136,12 @@ const AdminDashboard = () => {
               )}
               {activeTab === 'socials' && (
                 <SocialsForm socials={profile.socials} updateSocials={updateSocials} />
+              )}
+              {activeTab === 'contact' && (
+                <ContactInfoForm contactInfo={contactInfo} updateContactInfo={updateContactInfo} />
+              )}
+              {activeTab === 'devlog' && (
+                <DevLogManager devLog={devLog} addDevLog={addDevLog} deleteDevLog={deleteDevLog} />
               )}
             </div>
           </div>
@@ -206,10 +227,10 @@ const ProfileForm = ({ profile, updateProfile, handlePhotoUpload }) => {
 
 const ProjectsManager = ({ projects, addProject, editProject, deleteProject }) => {
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ title: '', description: '', techStack: '', githubLink: '' });
+  const [formData, setFormData] = useState({ title: '', description: '', techStack: '', githubLink: '', problem: '', solution: '', challenges: '' });
 
   const resetForm = () => {
-    setFormData({ title: '', description: '', techStack: '', githubLink: '' });
+    setFormData({ title: '', description: '', techStack: '', githubLink: '', problem: '', solution: '', challenges: '' });
     setEditingId(null);
   };
 
@@ -262,6 +283,27 @@ const ProjectsManager = ({ projects, addProject, editProject, deleteProject }) =
           onChange={(e) => setFormData({...formData, techStack: e.target.value})}
           required
         />
+        <div className="space-y-4">
+          <p className="text-sm font-bold opacity-50 uppercase tracking-widest">Case Study Details</p>
+          <textarea 
+            placeholder="The Problem (What issue were you trying to solve?)"
+            className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border-none"
+            value={formData.problem}
+            onChange={(e) => setFormData({...formData, problem: e.target.value})}
+          />
+          <textarea 
+            placeholder="The Solution (How did you solve it?)"
+            className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border-none"
+            value={formData.solution}
+            onChange={(e) => setFormData({...formData, solution: e.target.value})}
+          />
+          <textarea 
+            placeholder="Key Challenges (What was the hardest part?)"
+            className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border-none"
+            value={formData.challenges}
+            onChange={(e) => setFormData({...formData, challenges: e.target.value})}
+          />
+        </div>
         <div className="flex gap-4">
           <button type="submit" className="btn-primary flex items-center gap-2">
             <Plus size={18} /> {editingId ? 'Update' : 'Add'} Project
@@ -384,6 +426,112 @@ const SocialsForm = ({ socials, updateSocials }) => {
         </div>
       </div>
       <button onClick={() => updateSocials(formData)} className="btn-primary">Save Social Links</button>
+    </div>
+  );
+};
+
+const ContactInfoForm = ({ contactInfo, updateContactInfo }) => {
+  const [formData, setFormData] = useState(contactInfo);
+  return (
+    <div className="space-y-8">
+      <h3 className="text-xl font-bold">Contact Information</h3>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <label className="text-sm font-semibold">Email Address</label>
+          <input className="w-full px-4 py-3 glass rounded-xl" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold">Location</label>
+          <input className="w-full px-4 py-3 glass rounded-xl" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold">Phone Number</label>
+          <input className="w-full px-4 py-3 glass rounded-xl" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+        </div>
+      </div>
+      <button onClick={() => { updateContactInfo(formData); alert('Contact info updated!'); }} className="btn-primary">Save Contact Info</button>
+    </div>
+  );
+};
+
+const SkillsManager = ({ skills, addSkill, deleteSkill }) => {
+  const [formData, setFormData] = useState({ name: '', category: '' });
+  return (
+    <div className="space-y-12">
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold">Manage Skills</h3>
+        <div className="grid md:grid-cols-2 gap-4 mb-8">
+          <input placeholder="Skill Name (e.g. React)" className="px-4 py-2 glass rounded-lg" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+          <input placeholder="Category (e.g. Frontend)" className="px-4 py-2 glass rounded-lg" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} />
+        </div>
+        <button onClick={() => { addSkill(formData); setFormData({name:'', category:''}) }} className="btn-primary w-fit">Add Skill</button>
+      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        {skills.map(skill => (
+          <div key={skill.id} className="flex justify-between items-center p-4 glass rounded-xl">
+            <div><p className="font-bold">{skill.name}</p><p className="text-sm opacity-50">{skill.category}</p></div>
+            <button onClick={() => deleteSkill(skill.id)} className="p-2 text-red-500"><Trash2 size={18}/></button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ExperienceManager = ({ experience, addExperience, editExperience, deleteExperience }) => {
+  const [formData, setFormData] = useState({ role: '', company: '', duration: '', description: '' });
+  return (
+    <div className="space-y-12">
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold">Professional Experience</h3>
+        <div className="grid md:grid-cols-2 gap-4 mb-4">
+          <input placeholder="Role" className="px-4 py-2 glass rounded-lg" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} />
+          <input placeholder="Company" className="px-4 py-2 glass rounded-lg" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} />
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 mb-4">
+          <input placeholder="Duration (e.g. 2021 - 2023)" className="px-4 py-2 glass rounded-lg" value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})} />
+        </div>
+        <textarea placeholder="Description" rows="3" className="w-full px-4 py-2 glass rounded-lg mb-4 resize-none" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+        <button onClick={() => { addExperience(formData); setFormData({role:'', company:'', duration:'', description:''}) }} className="btn-primary w-fit">Add Experience</button>
+      </div>
+      <div className="space-y-4">
+        {experience.map(exp => (
+          <div key={exp.id} className="flex justify-between items-start p-4 glass rounded-xl">
+            <div>
+              <p className="font-bold">{exp.role} @ {exp.company}</p>
+              <p className="text-sm opacity-50 mb-2">{exp.duration}</p>
+              <p className="text-sm">{exp.description}</p>
+            </div>
+            <button onClick={() => deleteExperience(exp.id)} className="p-2 text-red-500"><Trash2 size={18}/></button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const DevLogManager = ({ devLog, addDevLog, deleteDevLog }) => {
+  const [formData, setFormData] = useState({ title: '', content: '' });
+  return (
+    <div className="space-y-12">
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold">Manage DevLog</h3>
+        <input placeholder="Log Title (e.g. Today I Learned: React Hooks)" className="w-full px-4 py-3 glass rounded-xl mb-4" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+        <textarea placeholder="Write your technical update or snippet here..." rows="4" className="w-full px-4 py-3 glass rounded-xl mb-4 resize-none" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} />
+        <button onClick={() => { addDevLog(formData); setFormData({title:'', content:''}) }} className="btn-primary w-fit">Post to DevLog</button>
+      </div>
+      <div className="space-y-4">
+        {devLog.map(log => (
+          <div key={log.id} className="flex justify-between items-start p-6 glass rounded-2xl">
+            <div>
+              <p className="font-bold text-lg mb-1">{log.title}</p>
+              <p className="text-xs opacity-50 mb-3 uppercase tracking-widest">{log.date}</p>
+              <p className="text-sm line-clamp-2 opacity-80">{log.content}</p>
+            </div>
+            <button onClick={() => deleteDevLog(log.id)} className="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg"><Trash2 size={20}/></button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { usePortfolio } from '../context/PortfolioContext';
+import MagneticButton from './MagneticButton';
+import Hero3D from './Hero3D';
 
 const HeroSection = () => {
   const { profile } = usePortfolio();
@@ -27,66 +29,100 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-      {/* Background Blobs */}
-      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-primary-500/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-primary-400/10 rounded-full blur-3xl animate-pulse delay-1000" />
+    <div className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-950">
+      {/* 3D Hero Background */}
+      <Hero3D />
+      
+      {/* Floating Elements (Keeping these for extra depth) */}
+      <motion.div 
+        animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 5, repeat: Infinity }}
+        className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/20 rounded-full blur-[100px]" 
+      />
+      <motion.div 
+        animate={{ y: [0, 20, 0], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 7, repeat: Infinity }}
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-[120px]" 
+      />
 
-      <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
+      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           className="text-left"
         >
-          <motion.p variants={itemVariants} className="text-primary-600 font-semibold tracking-wider mb-2">
-            WELCOME TO MY WORLD
-          </motion.p>
-          <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Hi, I'm <span className="bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent">{profile.name}</span>
+          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/10 border border-primary-500/20 rounded-full mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+            </span>
+            <span className="text-primary-400 text-xs font-black tracking-[0.2em] uppercase">Available for work</span>
+          </motion.div>
+
+          <motion.h1 variants={itemVariants} className="text-6xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tighter text-white">
+            DESIGNING <br />
+            <span className="bg-gradient-to-r from-primary-400 via-emerald-400 to-primary-600 bg-clip-text text-transparent">DIGITAL</span> <br />
+            EXPERIENCES.
           </motion.h1>
-          <motion.h2 variants={itemVariants} className="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 mb-8 font-medium">
-            a {profile.role}
-          </motion.h2>
-          <motion.p variants={itemVariants} className="text-lg text-gray-500 dark:text-gray-400 max-w-lg mb-10 leading-relaxed">
-            {profile.bio}
+
+          <motion.p variants={itemVariants} className="text-xl text-gray-400 max-w-lg mb-12 font-medium leading-relaxed">
+            I'm <span className="text-white font-bold">{profile.name}</span>, a {profile.role} {profile.bio}
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex flex-wrap gap-4 items-center">
-            <a href="#projects" className="btn-primary flex items-center gap-2 group">
-              View Projects <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </a>
-            <div className="flex gap-4 ml-4">
-              <a href={profile.socials.github} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-full hover:text-primary-600 transition-all">
-                <FaGithub size={20} />
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-6 items-center">
+            <MagneticButton>
+              <a href="#projects" className="btn-primary group">
+                Explore My Work
               </a>
-              <a href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-full hover:text-primary-600 transition-all">
-                <FaLinkedin size={20} />
+            </MagneticButton>
+            <MagneticButton>
+              <button 
+                onClick={() => window.print()} 
+                className="px-8 py-4 glass rounded-2xl border border-white/10 font-bold hover:bg-white/10 transition-all flex items-center gap-2"
+              >
+                Download CV
+              </button>
+            </MagneticButton>
+            <div className="flex gap-4 p-2 glass rounded-2xl border border-white/5">
+              <a href={profile.socials.github} target="_blank" rel="noopener noreferrer" className="p-3 hover:text-primary-400 transition-all">
+                <FaGithub size={22} />
               </a>
-              <a href={profile.socials.twitter} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-full hover:text-primary-600 transition-all">
-                <FaTwitter size={20} />
+              <a href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 hover:text-primary-400 transition-all">
+                <FaLinkedin size={22} />
+              </a>
+              <a href={profile.socials.twitter} target="_blank" rel="noopener noreferrer" className="p-3 hover:text-primary-400 transition-all">
+                <FaTwitter size={22} />
               </a>
             </div>
           </motion.div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="flex justify-center md:justify-end"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="hidden lg:flex justify-end"
         >
-          <div className="relative w-72 h-72 md:w-96 md:h-96">
-            <div className="absolute inset-0 bg-primary-600 rounded-2xl rotate-6 opacity-20" />
-            <div className="absolute inset-0 bg-primary-400 rounded-2xl -rotate-3 opacity-20" />
-            <div className="relative w-full h-full rounded-2xl overflow-hidden glass shadow-2xl">
+          <div className="relative w-[500px] h-[500px]">
+            {/* Geometric Shapes */}
+            <div className="absolute top-0 right-0 w-full h-full border border-white/5 rounded-[3rem] rotate-6" />
+            <div className="absolute top-0 right-0 w-full h-full border border-primary-500/20 rounded-[3rem] -rotate-3" />
+            
+            <div className="relative w-full h-full rounded-[3rem] overflow-hidden glass-morphism shadow-2xl group">
               {profile.photo ? (
-                <img src={profile.photo} alt={profile.name} className="w-full h-full object-cover" />
+                <img src={profile.photo} alt={profile.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-slate-800 text-gray-400">
-                  <span className="text-6xl font-bold">{profile.name.charAt(0)}</span>
+                <div className="w-full h-full flex items-center justify-center bg-slate-900 text-primary-500/20">
+                  <span className="text-[12rem] font-black">{profile.name.charAt(0)}</span>
                 </div>
               )}
+              
+              {/* Overlay Text */}
+              <div className="absolute bottom-8 left-8 right-8 p-6 glass rounded-2xl border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <p className="text-white font-bold text-lg mb-1">Let's build something</p>
+                <p className="text-gray-400 text-sm">Based in {profile.location || 'India'}</p>
+              </div>
             </div>
           </div>
         </motion.div>

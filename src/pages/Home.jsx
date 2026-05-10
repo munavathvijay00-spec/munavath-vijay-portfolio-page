@@ -1,8 +1,11 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
+import ExperienceSection from '../components/ExperienceSection';
 import ProjectsSection from '../components/ProjectsSection';
 import EducationSection from '../components/EducationSection';
 import AchievementsSection from '../components/AchievementsSection';
+import SkillsSection from '../components/SkillsSection';
+import DevLogSection from '../components/DevLogSection';
 import ContactSection from '../components/ContactSection';
 import { motion } from 'framer-motion';
 
@@ -17,12 +20,24 @@ const Home = () => {
       <section id="home">
         <HeroSection />
       </section>
+
+      <section id="experience" className="section-padding bg-gray-50/50 dark:bg-slate-900/50">
+        <ExperienceSection />
+      </section>
       
       <section id="projects" className="section-padding bg-gray-50/50 dark:bg-slate-900/50">
         <ProjectsSection />
       </section>
 
-      <section id="education" className="section-padding">
+      <section id="skills" className="section-padding">
+        <SkillsSection />
+      </section>
+
+      <section id="devlog" className="section-padding bg-slate-950">
+        <DevLogSection />
+      </section>
+
+      <section id="education" className="section-padding bg-gray-50/50 dark:bg-slate-900/50">
         <EducationSection />
       </section>
 

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Sun, Moon, Menu, X, Settings } from 'lucide-react';
+import { Sun, Moon, Menu, X, Settings, Volume2, VolumeX } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
+import { useSoundEffects } from '../context/SoundContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const { theme, toggleTheme, isLoggedIn, profile } = usePortfolio();
+  const { isMuted, toggleMute, playHover, playClick } = useSoundEffects();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -18,9 +20,11 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Experience', path: '/#experience' },
     { name: 'Projects', path: '/#projects' },
+    { name: 'Skills', path: '/#skills' },
+    { name: 'DevLog', path: '/#devlog' },
     { name: 'Education', path: '/#education' },
-    { name: 'Achievements', path: '/#achievements' },
     { name: 'Contact', path: '/#contact' },
   ];
 
@@ -44,6 +48,8 @@ const Navbar = () => {
             <a
               key={link.name}
               href={link.path}
+              onMouseEnter={playHover}
+              onClick={playClick}
               className={`text-sm font-medium transition-colors hover:text-primary-500 ${
                 isActive(link.path) ? 'text-primary-600' : 'text-gray-600 dark:text-gray-400'
               }`}
@@ -53,15 +59,27 @@ const Navbar = () => {
           ))}
           
           <button
-            onClick={toggleTheme}
+            onClick={() => { playClick(); toggleTheme(); }}
+            onMouseEnter={playHover}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Toggle Theme"
           >
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
+          <button
+            onClick={() => { playClick(); toggleMute(); }}
+            onMouseEnter={playHover}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label="Toggle Mute"
+          >
+            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+          </button>
+
           <Link
             to={isLoggedIn ? "/admin/dashboard" : "/admin/login"}
+            onMouseEnter={playHover}
+            onClick={playClick}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Admin"
           >
