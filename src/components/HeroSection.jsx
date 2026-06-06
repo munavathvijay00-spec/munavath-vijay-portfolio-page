@@ -4,7 +4,6 @@ import { ArrowRight } from 'lucide-react';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { usePortfolio } from '../context/PortfolioContext';
 import MagneticButton from './MagneticButton';
-import Hero3D from './Hero3D';
 import Typewriter from './Typewriter';
 
 const HeroSection = () => {
@@ -33,20 +32,22 @@ const HeroSection = () => {
   
   return (
     <div className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-950">
-      {/* 3D Hero Background */}
-      <Hero3D />
-      
-      {/* Floating Elements (Parallax backgrounds) */}
-      <motion.div 
-        animate={{ y: [0, -40, 0], opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/20 rounded-full blur-[100px]" 
-      />
-      <motion.div 
-        animate={{ y: [0, 40, 0], opacity: [0.2, 0.4, 0.2], scale: [1, 1.5, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px]" 
-      />
+      {/* Cinematic Video Background */}
+      <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="absolute min-w-full min-h-full object-cover scale-105"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-screens-416-large.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Dark overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950" />
+      </div>
 
       <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
         <motion.div
