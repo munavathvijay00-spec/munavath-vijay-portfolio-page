@@ -5,6 +5,7 @@ import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { usePortfolio } from '../context/PortfolioContext';
 import MagneticButton from './MagneticButton';
 import Hero3D from './Hero3D';
+import Typewriter from './Typewriter';
 
 const HeroSection = () => {
   const { profile } = usePortfolio();
@@ -28,21 +29,23 @@ const HeroSection = () => {
     }
   };
 
+  // Dynamic parallax calculation could be added via useScroll, but using simple CSS or motion is fine here.
+  
   return (
     <div className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-950">
       {/* 3D Hero Background */}
       <Hero3D />
       
-      {/* Floating Elements (Keeping these for extra depth) */}
+      {/* Floating Elements (Parallax backgrounds) */}
       <motion.div 
-        animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 5, repeat: Infinity }}
+        animate={{ y: [0, -40, 0], opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/20 rounded-full blur-[100px]" 
       />
       <motion.div 
-        animate={{ y: [0, 20, 0], opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 7, repeat: Infinity }}
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-[120px]" 
+        animate={{ y: [0, 40, 0], opacity: [0.2, 0.4, 0.2], scale: [1, 1.5, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px]" 
       />
 
       <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -57,18 +60,18 @@ const HeroSection = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
             </span>
-            <span className="text-primary-400 text-xs font-black tracking-[0.2em] uppercase">Available for work</span>
+            <span className="text-primary-400 text-xs font-black tracking-[0.2em] uppercase">Currently Building: PowerPulse</span>
           </motion.div>
 
-          <motion.h1 variants={itemVariants} className="text-6xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tighter text-white">
-            DESIGNING <br />
-            <span className="bg-gradient-to-r from-primary-400 via-emerald-400 to-primary-600 bg-clip-text text-transparent">DIGITAL</span> <br />
-            EXPERIENCES.
+          <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-black mb-8 leading-[1.1] tracking-tighter text-white">
+            I BUILD SECURE <br />
+            <span className="bg-gradient-to-r from-primary-400 via-emerald-400 to-primary-600 bg-clip-text text-transparent">TOKENIZATION ENGINES</span> <br />
+            & DYNAMIC DASHBOARDS.
           </motion.h1>
 
-          <motion.p variants={itemVariants} className="text-xl text-gray-400 max-w-lg mb-12 font-medium leading-relaxed">
-            I'm <span className="text-white font-bold">{profile.name}</span>, a {profile.role} {profile.bio}
-          </motion.p>
+          <motion.div variants={itemVariants} className="text-xl text-gray-400 max-w-lg mb-12 font-medium leading-relaxed">
+            I'm <span className="text-white font-bold">{profile.name}</span>, a <Typewriter words={["Frontend Engineer", "Solidity Developer", "UI/UX Designer"]} /> building for fintech startups.
+          </motion.div>
 
           <motion.div variants={itemVariants} className="flex flex-wrap gap-6 items-center">
             <MagneticButton>

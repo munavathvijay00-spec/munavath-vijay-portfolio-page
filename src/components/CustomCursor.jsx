@@ -1,54 +1,69 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const CustomCursor = () => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [isHovered, setIsHovered] = useState(false);
+  const [cursorType, setCursorType] = useState('default');
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
 
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
+  const springConfig = { damping: 30, stiffness: 300, mass: 0.5 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
 
-        const handleMouseOver = (e) => {
-            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a')) {
-                setIsHovered(true);
-            } else {
-                setIsHovered(false);
-            }
-        };
+  const dotSpringConfig = { damping: 40, stiffness: 500, mass: 0.1 };
+  const dotX = useSpring(mouseX, dotSpringConfig);
+  const dotY = useSpring(mouseY, dotSpringConfig);
 
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseover', handleMouseOver);
+  useEffect(() => {
+    const moveCursor = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
 
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseover', handleMouseOver);
-        };
-    }, []);
+    const handleMouseOver = (e) => {
+      const target = e.target.closest('a, button, [role="button"], [data-hover]');
+      if (target) {
+        setCursorType(target.getAttribute('data-hover-type') || 'pointer');
+      } else {
+        setCursorType('default');
+      }
+    };
 
-    return (
-        <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
-            <motion.div
-                className="w-8 h-8 rounded-full border border-primary-500 flex items-center justify-center"
-                animate={{
-                    x: mousePosition.x - 16,
-                    y: mousePosition.y - 16,
-                    scale: isHovered ? 2 : 1,
-                    backgroundColor: isHovered ? "rgba(16, 185, 129, 0.1)" : "transparent",
-                }}
-                transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.5 }}
-            />
-            <motion.div
-                className="w-1.5 h-1.5 rounded-full bg-primary-500 absolute top-0 left-0"
-                animate={{
-                    x: mousePosition.x - 3,
-                    y: mousePosition.y - 3,
-                }}
-                transition={{ type: "spring", stiffness: 1000, damping: 28, mass: 0.1 }}
-            />
-        </div>
-    );
+    window.addEventListener('mousemove', moveCursor);
+    window.addEventListener('mouseover', handleMouseOver);
+    return () => {
+      window.removeEventListener('mousemove', moveCursor);
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, [mouseX, mouseY]);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
+      <motion.div
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-primary-500 pointer-events-none"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+        animate={{
+          scale: cursorType === 'pointer' ? 2 : 1,
+          backgroundColor: cursorType === 'pointer' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(0,0,0,0)',
+        }}
+        transition={{ duration: 0.2 }}
+      />
+      <motion.div
+        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-primary-500 pointer-events-none"
+        style={{
+          x: dotX,
+          y: dotY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+      />
+    </div>
+  );
 };
 
 export default CustomCursor;

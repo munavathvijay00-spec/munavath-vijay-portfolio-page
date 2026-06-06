@@ -9,11 +9,20 @@ import AdminDashboard from './pages/AdminDashboard'
 import Footer from './components/Footer'
 import CustomCursor from './components/CustomCursor'
 import ProjectDetail from './pages/ProjectDetail'
+import ReadingProgressBar from './components/ReadingProgressBar'
+import ScrollToTop from './components/ScrollToTop'
+import AIChatbot from './components/AIChatbot'
+import SEOConfig from './components/SEOConfig'
+import NotFound from './pages/NotFound'
 
 function App() {
   return (
     <PortfolioProvider>
       <SoundProvider>
+        <SEOConfig />
+        <ReadingProgressBar />
+        <ScrollToTop />
+        <AIChatbot />
         <CustomCursor />
         <Router>
         <div className="min-h-screen flex flex-col">
@@ -24,6 +33,7 @@ function App() {
               <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />
