@@ -5,7 +5,6 @@ import { FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { usePortfolio } from '../context/PortfolioContext';
 import { useSoundEffects } from '../context/SoundContext';
-import GitHubStats from './GitHubStats';
 import TiltCard from './TiltCard';
 import MiniBrowserHover from './MiniBrowserHover';
 
@@ -136,11 +135,6 @@ const ProjectsSection = () => {
           ))}
         </AnimatePresence>
       </motion.div>
-
-      <div className="max-w-7xl mx-auto">
-         {/* GitHub Stats Card */}
-         <GitHubStats />
-      </div>
     </div>
   );
 };

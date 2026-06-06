@@ -7,7 +7,6 @@ import AchievementsSection from '../components/AchievementsSection';
 import SkillsSection from '../components/SkillsSection';
 import DevLogSection from '../components/DevLogSection';
 import ContactSection from '../components/ContactSection';
-import BlockchainShowcase from '../components/BlockchainShowcase';
 import { motion } from 'framer-motion';
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
 
@@ -31,10 +30,6 @@ const Home = () => {
       
       <section id="projects" className="section-padding bg-gray-50/50 dark:bg-slate-900/50">
         <ProjectsSection />
-      </section>
-
-      <section id="web3" className="section-padding bg-slate-950">
-        <BlockchainShowcase />
       </section>
 
       <section id="skills" className="section-padding">

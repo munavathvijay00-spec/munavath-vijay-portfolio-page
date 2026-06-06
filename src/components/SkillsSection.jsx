@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Cpu, Terminal } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
-import TechStackPhysics from './TechStackPhysics';
 import SkillsRadar from './SkillsRadar';
 
 const SkillsSection = () => {
@@ -70,8 +69,6 @@ const SkillsSection = () => {
           ))}
         </div>
       </div>
-
-      <TechStackPhysics />
     </div>
   );
 };

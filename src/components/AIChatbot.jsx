@@ -34,9 +34,16 @@ const AIChatbot = () => {
 
     // Mock AI response logic based on semantic keywords
     setTimeout(() => {
-      let response = "I'm still learning, but you can check out the Projects section!";
+      let response = "";
       const lower = userMsg.toLowerCase();
       
+      const defaultResponses = [
+        "That's interesting! You can explore the Projects section to see how I tackle complex problems.",
+        "I'm continuously learning! Feel free to reach out to Vijay via the Contact section for detailed discussions.",
+        "Great question! My expertise spans across frontend development, UI/UX, and performance optimization.",
+        "I'm an AI assistant designed to help you navigate this portfolio. Let me know if you want to see specific projects!"
+      ];
+
       if (lower.includes('blockchain') || lower.includes('web3') || lower.includes('solidity')) {
         const web3Projects = projects.filter(p => p.techStack.includes('Solidity') || p.techStack.includes('Web3.js') || p.title.toLowerCase().includes('token'));
         if(web3Projects.length > 0) {
@@ -48,6 +55,13 @@ const AIChatbot = () => {
         response = "Vijay crafts pixel-perfect, highly animated React interfaces. Just look at this portfolio!";
       } else if (lower.includes('contact') || lower.includes('hire') || lower.includes('email')) {
         response = "You can reach Vijay via the Contact section at the bottom, or connect with him on LinkedIn!";
+      } else if (lower.includes('hello') || lower.includes('hi ') || lower === 'hi') {
+        response = "Hello there! How can I help you explore Vijay's portfolio today?";
+      } else if (lower.includes('who are you')) {
+        response = "I'm a virtual assistant built by Vijay to help guide you through this portfolio. Think of me as your personal tour guide!";
+      } else {
+        // Pick a random default response
+        response = defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
       }
 
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
