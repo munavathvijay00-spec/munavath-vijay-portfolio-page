@@ -8,6 +8,7 @@ const INITIAL_DATA = {
     role: "Full Stack Developer",
     bio: "Passionate student and developer focused on building clean, accessible, and high-performance web applications.",
     photo: null,
+    resumeLink: "",
     socials: {
       github: "https://github.com",
       linkedin: "https://linkedin.com",

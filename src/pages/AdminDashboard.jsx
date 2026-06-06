@@ -210,6 +210,16 @@ const ProfileForm = ({ profile, updateProfile, handlePhotoUpload }) => {
         </div>
       </div>
       <div className="space-y-2">
+        <label className="text-sm font-semibold">Resume Link (Google Drive, Dropbox, etc.)</label>
+        <input 
+          type="url"
+          placeholder="https://..."
+          className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800/50 border-none outline-none focus:ring-2 ring-primary-500"
+          value={formData.resumeLink || ''}
+          onChange={(e) => setFormData({...formData, resumeLink: e.target.value})}
+        />
+      </div>
+      <div className="space-y-2">
         <label className="text-sm font-semibold">Bio</label>
         <textarea 
           rows="4"

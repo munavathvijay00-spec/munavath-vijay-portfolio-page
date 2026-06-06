@@ -81,12 +81,20 @@ const HeroSection = () => {
               </a>
             </MagneticButton>
             <MagneticButton>
-              <button 
-                onClick={() => window.print()} 
+              <a 
+                href={profile.resumeLink || '/resume.pdf'} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  if (!profile.resumeLink) {
+                    e.preventDefault();
+                    alert("Resume hasn't been uploaded yet!");
+                  }
+                }}
                 className="px-8 py-4 glass rounded-2xl border border-white/10 font-bold hover:bg-white/10 transition-all flex items-center gap-2"
               >
                 Download CV
-              </button>
+              </a>
             </MagneticButton>
             <div className="flex gap-4 p-2 glass rounded-2xl border border-white/5">
               <a href={profile.socials.github} target="_blank" rel="noopener noreferrer" className="p-3 hover:text-primary-400 transition-all">
